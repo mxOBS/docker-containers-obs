@@ -1,0 +1,32 @@
+--- /usr/lib/obs/server/BSUtil.pm.orig	2019-12-12 21:36:10.925768450 +0100
++++ /usr/lib/obs/server/BSUtil.pm	2019-12-12 23:07:20.443526503 +0100
+@@ -428,12 +428,17 @@
+ sub lockopen {
+   my ($fg, $op, $fn, $nonfatal) = @_;
+ 
++  my $x = LOCK_EX;
++  if ($op eq "<") {
++    $x = LOCK_SH;
++  }
++
+   while (1) {
+     if (!open($fg, $op, $fn)) {
+       return undef if $nonfatal;
+       die("$fn: $!\n");
+     }
+-    flock($fg, LOCK_EX) || die("flock $fn: $!\n");
++    flock($fg, $x) || die("flock $fn: $!\n");
+     my @s = stat($fg);
+     last if @s && $s[3];
+     close $fg;
+@@ -479,8 +484,8 @@
+   my ($fg, $fn, $fnf, $dd, $dtd) = @_;
+ 
+   writexml($fn, undef, $dd, $dtd);
+-  open($fg, '<', $fn) || die("$fn: $!\n");
+-  flock($fg, LOCK_EX | LOCK_NB) || die("lock: $!\n");
++  open($fg, '>', $fn) || die("$fn: $!\n");
++  flock($fg, LOCK_EX | LOCK_NB) || die("flock($fn, LOCK_EX | LOCK_NB): $!\n");
+   if (!link($fn, $fnf)) {
+     unlink($fn);
+     close $fg;

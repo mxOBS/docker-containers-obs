@@ -1,0 +1,17 @@
+--- /usr/lib/obs/server/bs_dodup.orig	2019-12-17 15:23:09.482820627 +0100
++++ /usr/lib/obs/server/bs_dodup	2019-12-17 15:24:06.872412568 +0100
+@@ -309,12 +309,12 @@
+   writestr($file, undef, '');
+   my $basearch = Build::Deb::basearch($doddata->{'arch'});
+   for my $component (@components) {
+-    my $pfile = $component eq '.' ? 'Packages.gz' : "$component/binary-$basearch/Packages.gz";
++    my $pfile = $component eq '.' ? 'Packages.xz' : "$component/binary-$basearch/Packages.xz";
+     die("$pfile not in Release\n") if $doddata->{'pubkey'} && !$files{$pfile};
+     my $tmp = "$file.tmp";
+     fetch("$url$pfile", $sslfingerprint, $timeout_large, $tmp);
+     chkverify($tmp, $files{$pfile}) if $files{$pfile};
+-    uncompress($tmp, "Packages.gz", $file);
++    uncompress($tmp, "Packages.xz", $file);
+     unlink($tmp);
+   }
+   return ($newcookie, $baseurl);

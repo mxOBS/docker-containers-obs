@@ -1,0 +1,123 @@
+version: '2.1'
+services:
+  repositoryserver:
+    build:
+      context: ./obsrepositoryserver/
+    volumes:
+     - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
+     - /srv/obs:/srv/obs
+    ports:
+     - 5252:5252
+
+  sourceserver:
+    build:
+      context: ./obssourceserver/
+    volumes:
+     - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
+     - /srv/obs:/srv/obs
+    ports:
+     - 5352:5352
+    mem_limit: 10G
+    restart: on-failure
+
+  scheduler_x86:
+    build:
+      context: ./obsscheduler/
+    volumes:
+     - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
+     - /srv/obs:/srv/obs
+
+  scheduler_arm64:
+    build:
+      context: ./obsscheduler/
+    volumes:
+     - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
+     - /srv/obs:/srv/obs
+    command: aarch64
+
+  scheduler_armhf:
+    build:
+      context: ./obsscheduler/
+    volumes:
+     - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
+     - /srv/obs:/srv/obs
+    command: armv7l
+
+  dodup:
+    build:
+      context: ./obsdodup/
+    volumes:
+     - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
+     - /srv/obs:/srv/obs
+
+  signd:
+    build:
+      context: ./obssignd/
+    environment:
+     - GNUPGHOME=/srv/obs/gnupg
+    volumes:
+     - /srv/obs:/srv/obs
+    ports:
+     - 5167:5167
+
+  signer:
+    build:
+      context: ./obssigner/
+    volumes:
+     - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
+     - /srv/obs:/srv/obs
+
+  publisher:
+    build:
+      context: ./obspublisher/
+    volumes:
+     - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
+     - /srv/obs:/srv/obs
+    cap_add:
+     - SETUID
+
+  dispatcher:
+    build:
+      context: ./obsdispatch/
+    volumes:
+     - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
+     - /srv/obs:/srv/obs
+
+  service:
+    build:
+      context: ./obsserviceservice/
+    volumes:
+     - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
+     - /srv/obs:/srv/obs
+    ports:
+     - 5152:5152
+
+  servicedispatch:
+    build:
+      context: ./obsservicedispatch/
+    volumes:
+     - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
+     - /srv/obs:/srv/obs
+
+  admin:
+    build:
+      context: ./obsadmin/
+    volumes:
+     - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
+     - /srv/obs:/srv/obs
+
+  worker_1:
+    build:
+      context: ./obsworker/
+    cap_add:
+     - SYS_ADMIN
+    environment:
+     - OBS_WORKER_ID=worker:0
+     - OBS_WORKER_JOBS=4
+     - OBS_WORKER_PORT=1600
+     - OBS_REPO_SERVER=repositoryserver:5252
+     - OBS_SRC_SERVER=sourceserver:5352
+    ports:
+     - 1600:1600
+    volumes:
+     - /tmp/worker:/var/obsworker/run
