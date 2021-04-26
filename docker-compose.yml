@@ -20,6 +20,14 @@ services:
     mem_limit: 10G
     restart: on-failure
 
+  scheduler_local:
+    build:
+      context: ./obsscheduler/
+    volumes:
+     - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
+     - /srv/obs:/srv/obs
+    command: local
+
   scheduler_x86:
     build:
       context: ./obsscheduler/

@@ -9,6 +9,8 @@ RUN \
 	zypper -n ar -f http://download.opensuse.org/repositories/devel:/languages:/python/openSUSE_Leap_42.2/ devel:languages:python && \
 	rpm --import http://download.opensuse.org/repositories/OBS:/Server:/2.7/openSUSE_42.1/repodata/repomd.xml.key && \
 	rpm --import http://download.opensuse.org/repositories/devel:/languages:/python/openSUSE_Leap_42.2/repodata/repomd.xml.key && \
+	zypper -n ar -f http://download.opensuse.org/repositories/home:/mayerjosua:/OBS/openSUSE_Leap_15.1/ obs-2.10-arm-addon && \ 
+	rpm --import http://download.opensuse.org/repositories/home:/mayerjosua:/OBS/openSUSE_Leap_15.1/repodata/repomd.xml.key && \
 	:
 
 # create system users here *before* zypper to enforce static uid and gid
