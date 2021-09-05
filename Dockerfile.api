@@ -1,0 +1,24 @@
+ARG PREFIX=obs/ TAG=:latest
+FROM ${PREFIX}base:${TAG}
+
+# install Ruby Frontend App
+RUN zypper -n install obs-api
+
+# configure apache
+RUN set -e; \
+	for mod in a2enmod passenger rewrite proxy proxy_http xforward headers ssl socache_shmcb; do \
+		a2enmod $mod; \
+	done; \
+	sed -i 's,APACHE_SERVER_FLAGS=.*,APACHE_SERVER_FLAGS="SSL",' /etc/sysconfig/apache2; \
+	sed -i 's,^#use_xforward:.*,use_xforward: true,' /srv/www/obs/api/config/options.yml; \
+	:
+
+# configure app
+RUN set -e; \
+	sed -i 's;^  # influxdb_hosts:.*;  influxdb_hosts: "";g' /srv/www/obs/api/config/options.yml; \
+	sed -i 's;^  source_host:.*;  source_host: sourceserver;g' /srv/www/obs/api/config/options.yml; \
+	:
+
+# entrypoint
+ENTRYPOINT ["/usr/sbin/start_apache2"]
+CMD ["-DFOREGROUND", "-k", "start"]

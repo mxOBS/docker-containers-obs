@@ -1,5 +1,13 @@
 version: '2.1'
 services:
+  api:
+    image: docker.home.jm0.eu/obs/api
+    volumes:
+    - /srv/obs:/srv/obs
+    - ./database.yml:/srv/www/obs/api/config/database.yml
+    ports:
+    - "443:443"
+
   repositoryserver:
     image: docker.home.jm0.eu/obs/repositoryserver
     volumes:

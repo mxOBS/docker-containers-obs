@@ -1,4 +1,4 @@
-CONTAINER := admin dispatch dodup publisher repositoryserver scheduler servicedispatch serviceservice signd signer sourceserver worker
+CONTAINER := admin api dispatch dodup publisher repositoryserver scheduler servicedispatch serviceservice signd signer sourceserver worker
 CONTAINER_DEPS := base
 PREFIX ?= docker.home.jm0.eu/obs/
 TAG ?= latest

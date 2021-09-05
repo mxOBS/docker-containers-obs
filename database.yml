@@ -1,0 +1,10 @@
+production:
+  adapter: mysql2
+  host: dbsrv
+  database: api_production
+  username: root
+  password: opensuse
+  encoding: utf8mb4
+  collation: utf8mb4_unicode_ci
+  timeout: 15
+  pool: 30
