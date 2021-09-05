@@ -1,0 +1,9 @@
+ARG PREFIX=obs/ TAG=:latest
+FROM ${PREFIX}base:${TAG}
+
+# install additional runtime dependencies
+RUN zypper -n install obs-service-gbp which xz
+
+# entrypoint
+ENTRYPOINT ["/usr/lib/obs/server/bs_service"]
+CMD ["--logfile", "/srv/obs/log/src_service.log"]

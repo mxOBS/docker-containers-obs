@@ -7,7 +7,7 @@ RUN zypper -n install curl
 RUN \
 	zypper -n ar -f http://download.opensuse.org/repositories/OBS:/Server:/2.10/15.3 obs-2.10 && \
 	rpm --import http://download.opensuse.org/repositories/OBS:/Server:/2.10/15.3/repodata/repomd.xml.key && \
-	zypper -n ar -f http://download.opensuse.org/repositories/home:/mayerjosua:/OBS/15.3/ obs-2.10-arm-addon && \ 
+	zypper -n ar -f http://download.opensuse.org/repositories/home:/mayerjosua:/OBS/15.3/ obs-2.10-arm-addon && \
 	rpm --import http://download.opensuse.org/repositories/home:/mayerjosua:/OBS/15.3/repodata/repomd.xml.key && \
 	:
 
@@ -20,13 +20,6 @@ RUN set -e; \
 
 # install packages
 RUN zypper -n install obs-server
-RUN zypper -n install gzip xz
-
-RUN zypper -n install patch
-COPY *.patch /
-RUN set -e; \
-	patch -p0 < debug-flock.patch; \
-	:
 
 # mount persistent storage
 VOLUME ["/srv/obs"]
@@ -34,7 +27,7 @@ VOLUME ["/srv/obs"]
 # create runtime directories
 RUN mkdir -p /srv/obs
 
-# entrypoint
-COPY entry.sh /entry.sh
-ENTRYPOINT ["/bin/bash", "/entry.sh"]
-CMD []
+# patch locking to work with NFS
+RUN zypper -n install patch
+COPY debug-flock.patch /
+RUN patch -p0 < debug-flock.patch

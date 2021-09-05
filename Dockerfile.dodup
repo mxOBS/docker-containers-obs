@@ -1,0 +1,9 @@
+ARG PREFIX=obs/ TAG=:latest
+FROM ${PREFIX}base:${TAG}
+
+# install additional runtime dependencies
+RUN zypper -n install gzip xz
+
+# entrypoint
+ENTRYPOINT ["/usr/lib/obs/server/bs_dodup"]
+CMD ["--logfile", "/srv/obs/log/dodup.log"]

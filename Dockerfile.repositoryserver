@@ -1,0 +1,12 @@
+ARG PREFIX=obs/ TAG=:latest
+FROM ${PREFIX}base:${TAG}
+
+# install additional runtime dependencies
+RUN zypper -n install xz
+
+# entrypoint
+ENTRYPOINT ["/usr/lib/obs/server/bs_repserver"]
+CMD ["--logfile", "/srv/obs/log/rep_server.log"]
+
+# public services on the network
+EXPOSE 5252

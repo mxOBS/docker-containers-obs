@@ -1,8 +1,7 @@
 version: '2.1'
 services:
   repositoryserver:
-    build:
-      context: ./obsrepositoryserver/
+    image: docker.home.jm0.eu/obs/repositoryserver
     volumes:
      - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
      - /srv/obs:/srv/obs
@@ -10,8 +9,7 @@ services:
      - 5252:5252
 
   sourceserver:
-    build:
-      context: ./obssourceserver/
+    image: docker.home.jm0.eu/obs/sourceserver
     volumes:
      - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
      - /srv/obs:/srv/obs
@@ -21,46 +19,40 @@ services:
     restart: on-failure
 
   scheduler_local:
-    build:
-      context: ./obsscheduler/
+    image: docker.home.jm0.eu/obs/scheduler
     volumes:
      - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
      - /srv/obs:/srv/obs
     command: local
 
   scheduler_x86:
-    build:
-      context: ./obsscheduler/
+    image: docker.home.jm0.eu/obs/scheduler
     volumes:
      - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
      - /srv/obs:/srv/obs
 
   scheduler_arm64:
-    build:
-      context: ./obsscheduler/
+    image: docker.home.jm0.eu/obs/scheduler
     volumes:
      - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
      - /srv/obs:/srv/obs
     command: aarch64
 
   scheduler_armhf:
-    build:
-      context: ./obsscheduler/
+    image: docker.home.jm0.eu/obs/scheduler
     volumes:
      - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
      - /srv/obs:/srv/obs
     command: armv7l
 
   dodup:
-    build:
-      context: ./obsdodup/
+    image: docker.home.jm0.eu/obs/dodup
     volumes:
      - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
      - /srv/obs:/srv/obs
 
   signd:
-    build:
-      context: ./obssignd/
+    image: docker.home.jm0.eu/obs/signd
     environment:
      - GNUPGHOME=/srv/obs/gnupg
     volumes:
@@ -69,15 +61,13 @@ services:
      - 5167:5167
 
   signer:
-    build:
-      context: ./obssigner/
+    image: docker.home.jm0.eu/obs/signer
     volumes:
      - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
      - /srv/obs:/srv/obs
 
   publisher:
-    build:
-      context: ./obspublisher/
+    image: docker.home.jm0.eu/obs/publisher
     volumes:
      - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
      - /srv/obs:/srv/obs
@@ -85,15 +75,13 @@ services:
      - SETUID
 
   dispatcher:
-    build:
-      context: ./obsdispatch/
+    image: docker.home.jm0.eu/obs/dispatch
     volumes:
      - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
      - /srv/obs:/srv/obs
 
   service:
-    build:
-      context: ./obsserviceservice/
+    image: docker.home.jm0.eu/obs/serviceservice
     volumes:
      - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
      - /srv/obs:/srv/obs
@@ -101,22 +89,19 @@ services:
      - 5152:5152
 
   servicedispatch:
-    build:
-      context: ./obsservicedispatch/
+    image: docker.home.jm0.eu/obs/servicedispatch
     volumes:
      - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
      - /srv/obs:/srv/obs
 
   admin:
-    build:
-      context: ./obsadmin/
+    image: docker.home.jm0.eu/obs/admin
     volumes:
      - ./BSConfig.pm:/usr/lib/obs/server/BSConfig.pm
      - /srv/obs:/srv/obs
 
   worker_1:
-    build:
-      context: ./obsworker/
+    image: docker.home.jm0.eu/obs/worker
     cap_add:
      - SYS_ADMIN
     environment:

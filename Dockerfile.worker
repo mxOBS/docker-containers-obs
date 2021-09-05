@@ -1,0 +1,17 @@
+ARG PREFIX=obs/ TAG=:latest
+FROM ${PREFIX}base:${TAG}
+
+# install additional runtime dependencies
+RUN zypper -n install obs-worker xz
+
+# mount persistent storage
+VOLUME ["/var/obsworker/cache"]
+VOLUME ["/var/obsworker/run"]
+
+# create runtime directories
+RUN mkdir -p /var/obsworker/{cache,run}
+
+# entrypoint
+COPY worker.sh /entry.sh
+ENTRYPOINT ["/bin/bash", "/entry.sh"]
+CMD ["x86_64"]

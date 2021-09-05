@@ -1,0 +1,10 @@
+ARG PREFIX=obs/ TAG=:latest
+FROM ${PREFIX}base:${TAG}
+
+# install additional runtime dependencies
+RUN zypper -n install xz
+
+# entrypoint
+COPY scheduler.sh /entry.sh
+ENTRYPOINT ["/bin/bash", "/entry.sh"]
+CMD ["x86_64"]
