@@ -1,4 +1,5 @@
-ARG PREFIX=obs/ TAG=:latest
+ARG PREFIX=obs/
+ARG TAG=:latest
 FROM ${PREFIX}base:${TAG}
 
 # install Ruby Frontend App
